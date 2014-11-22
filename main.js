@@ -1,6 +1,6 @@
 var Game = function () {
   var ctx;
-  var xPosition = 0;
+  var xPosition = 1;
   var yPosition = 1;
   var time = 100;
 
@@ -10,8 +10,31 @@ var Game = function () {
   }
 
   function start() {
-    xPosition += 2;
     //yPosition += 4;
+
+    window.onkeydown = function(event) {
+      var e = event || window.event;
+      var key = e.which || e.keyCode;
+      
+      switch(key) {
+        case 38: // Up
+          yPosition -= 1;
+          break;
+        case 40: // Down
+          yPosition += 1;
+          break;
+        case 37: // Left
+          xPosition -= 1;
+          break;
+        case 39 : // Right
+          xPosition += 1;
+          break;
+        default: 
+          return true;
+      }
+    
+      return false;
+    }
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     ctx.fillStyle = 'green';
     ctx.fillRect(xPosition, yPosition, 20, 10);
