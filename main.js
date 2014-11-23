@@ -10,8 +10,6 @@ var Game = function () {
   }
 
   function start() {
-    //yPosition += 4;
-
     window.onkeydown = function(event) {
       var e = event || window.event;
       var key = e.which || e.keyCode;
@@ -31,10 +29,10 @@ var Game = function () {
           break;
         default: 
           return true;
-      }
-    
+      }    
       return false;
     }
+    
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     ctx.fillStyle = 'green';
     ctx.fillRect(xPosition, yPosition, 20, 10);
