@@ -5,7 +5,7 @@ var Game = function () {
   var time = 100;
 
   function init() {
-	  ctx = document.getElementById('canvas').getContext('2d');
+    ctx = document.getElementById('canvas').getContext('2d');
     start();
   }
 
@@ -32,7 +32,7 @@ var Game = function () {
       }    
       return false;
     }
-    
+
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     ctx.fillStyle = 'green';
     ctx.fillRect(xPosition, yPosition, 20, 10);
