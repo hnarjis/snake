@@ -1,8 +1,11 @@
 var Game = function () {
   var ctx;
-  var xPosition = 1;
-  var yPosition = 1;
-  var time = 100;
+  var size = 10;
+  var time = 500;
+  var positionArray = [];
+  positionArray.push([6, 4]);
+  positionArray.push([5, 4]);
+  positionArray.push([4, 4]);
 
   function init() {
     ctx = document.getElementById('canvas').getContext('2d');
@@ -10,22 +13,30 @@ var Game = function () {
   }
 
   function start() {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    move();
+    draw(ctx);
+    setTimeout(start, time);
+  }
+
+  function move() {
+    var nextPosition = positionArray[0].slice();
     window.onkeydown = function(event) {
       var e = event || window.event;
       var key = e.which || e.keyCode;
       
       switch(key) {
         case 38: // Up
-          yPosition -= 1;
+          nextPosition[1] -= 1;
           break;
         case 40: // Down
-          yPosition += 1;
+          nextPosition[1] += 1;
           break;
         case 37: // Left
-          xPosition -= 1;
+          nextPosition[0] -= 1;
           break;
         case 39 : // Right
-          xPosition += 1;
+          nextPosition[0] += 1;
           break;
         default: 
           return true;
@@ -33,11 +44,21 @@ var Game = function () {
       return false;
     }
 
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    ctx.fillStyle = 'green';
-    ctx.fillRect(xPosition, yPosition, 20, 10);
-    setTimeout(start, time);
+    positionArray.unshift(nextPosition);
+    positionArray.pop();
   }
+
+
+  function draw(ctx) {
+    ctx.save();
+    ctx.fillStyle = 'green';
+    for(var i = 0; i < positionArray.length; i++) {
+      var x = size * positionArray[i][0];
+      var y = size * positionArray[i][1];
+      ctx.fillRect(x, y, size, size);
+    }
+    ctx.restore();
+  }  
 
   return {
     init: init
