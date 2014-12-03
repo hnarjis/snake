@@ -3,6 +3,7 @@ var SNAKE_GAME = {};
 SNAKE_GAME.game = function () {
   var ctx;
   var timeout = 100;
+  SNAKE_GAME.blockSize = 10;
 
   function init() {
     ctx = document.getElementById('canvas').getContext('2d'); 
@@ -23,8 +24,10 @@ SNAKE_GAME.game = function () {
 }();
 
 SNAKE_GAME.snake = function() {
-  var xPosition = 1;
-  var yPosition = 1;
+  var positionArray = [];
+  positionArray.push([6, 4]);
+  positionArray.push([5, 4]);
+  positionArray.push([4, 4]);
 
   function move() {
     window.onkeydown = function(event) {
@@ -53,7 +56,11 @@ SNAKE_GAME.snake = function() {
 
   function draw(ctx) {
     ctx.fillStyle = 'green';
-    ctx.fillRect(xPosition, yPosition, 20, 10);
+    for(var i = 0; i < positionArray.length; i++) {
+      var x = SNAKE_GAME.blockSize * positionArray[i][0];
+      var y = SNAKE_GAME.blockSize * positionArray[i][1];
+      ctx.fillRect(x, y, SNAKE_GAME.blockSize, SNAKE_GAME.blockSize);
+    }
   }
 
   return {
