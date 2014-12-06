@@ -25,33 +25,38 @@ SNAKE_GAME.game = function () {
 
 SNAKE_GAME.snake = function() {
   var positionArray = [];
-  positionArray.push([6, 4]);
-  positionArray.push([5, 4]);
-  positionArray.push([4, 4]);
+  positionArray.push([3, 1]);
+  positionArray.push([2, 1]);
+  positionArray.push([1, 1]);
 
   function move() {
+    var nextPosition = positionArray[0].slice();
+
     window.onkeydown = function(event) {
       var e = event || window.event;
       var key = e.which || e.keyCode;
       
       switch(key) {
         case 38: // Up
-          yPosition -= 1;
+          nextPosition[1] -= 1;
           break;
         case 40: // Down
-          yPosition += 1;
+          nextPosition[1] += 1;
           break;
         case 37: // Left
-          xPosition -= 1;
+          nextPosition[0] -= 1;
           break;
         case 39 : // Right
-          xPosition += 1;
+          nextPosition[0] += 1;
           break;
         default: 
           return true;
       }    
       return false;
     }
+
+    positionArray.unshift(nextPosition);
+    positionArray.pop();
   }
 
   function draw(ctx) {
