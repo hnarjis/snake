@@ -2,20 +2,32 @@ var SNAKE_GAME = {};
 
 SNAKE_GAME.game = function () {
   var ctx;
-  var timeout = 100;
+  var timeout = 500;
   SNAKE_GAME.blockSize = 10;
 
   function init() {
     ctx = document.getElementById('canvas').getContext('2d'); 
     snake = SNAKE_GAME.snake();
-    start();
+    window.onkeydown = keyHandler;
+    loop();
   }
 
-  function start() {
+  function loop() {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    snake.move();
     snake.draw(ctx);
-    setTimeout(start, timeout);
+    setTimeout(loop, timeout);
+  }
+
+  function keyHandler(event) {
+    var e = event || window.event;
+    var key = e.which || e.keyCode;
+    var keyMappings = {38:'up', 40:'down', 37:'left', 39:'right'};
+
+    if (key in keyMappings) {
+      snake.move(keyMappings[key]);
+      return true;
+    }
+    return false;
   }
 
   return {
@@ -29,43 +41,38 @@ SNAKE_GAME.snake = function() {
   positionArray.push([2, 1]);
   positionArray.push([1, 1]);
 
-  function move() {
+  function move(direction) {
     var nextPosition = positionArray[0].slice();
-
-    window.onkeydown = function(event) {
-      var e = event || window.event;
-      var key = e.which || e.keyCode;
-      
-      switch(key) {
-        case 38: // Up
-          nextPosition[1] -= 1;
-          break;
-        case 40: // Down
-          nextPosition[1] += 1;
-          break;
-        case 37: // Left
-          nextPosition[0] -= 1;
-          break;
-        case 39 : // Right
-          nextPosition[0] += 1;
-          break;
-        default: 
-          return true;
-      }    
-      return false;
-    }
-
+    
+    switch(direction) {
+      case 'up':
+        nextPosition[1] -= 1;
+        break;
+      case 'down':
+        nextPosition[1] += 1;
+        break;
+      case 'left':
+        nextPosition[0] -= 1;
+        break;
+      case 'right':
+        nextPosition[0] += 1;
+        break;
+      default: 
+        throw new Exception('Invalid direction.');
+    }    
     positionArray.unshift(nextPosition);
     positionArray.pop();
   }
 
   function draw(ctx) {
+    ctx.save();
     ctx.fillStyle = 'green';
     for(var i = 0; i < positionArray.length; i++) {
       var x = SNAKE_GAME.blockSize * positionArray[i][0];
       var y = SNAKE_GAME.blockSize * positionArray[i][1];
       ctx.fillRect(x, y, SNAKE_GAME.blockSize, SNAKE_GAME.blockSize);
     }
+    ctx.restore();
   }
 
   return {
