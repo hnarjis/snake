@@ -2,32 +2,39 @@ var SNAKE_GAME = {};
 
 SNAKE_GAME.game = function () {
   var ctx;
-  var timeout = 500;
+  var timeout = 400;
   SNAKE_GAME.blockSize = 10;
+  var snake;
 
   function init() {
     ctx = document.getElementById('canvas').getContext('2d'); 
     snake = SNAKE_GAME.snake();
-    window.onkeydown = keyHandler;
+    handleKeys();
     loop();
   }
 
   function loop() {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    snake.turn();
     snake.draw(ctx);
     setTimeout(loop, timeout);
   }
 
-  function keyHandler(event) {
-    var e = event || window.event;
-    var key = e.which || e.keyCode;
+  function handleKeys() {
     var keyMappings = {38:'up', 40:'down', 37:'left', 39:'right'};
 
-    if (key in keyMappings) {
-      snake.move(keyMappings[key]);
-      return true;
+    window.onkeydown = function(event) {
+      var e = event || window.event;
+      var key = e.which || e.keyCode;
+      var direction = keyMappings[key];
+
+      if (direction) {
+        snake.setDirection(direction);
+        event.preventDefault();
+        return true;
+      }
+      return false;
     }
-    return false;
   }
 
   return {
@@ -40,10 +47,34 @@ SNAKE_GAME.snake = function() {
   positionArray.push([3, 1]);
   positionArray.push([2, 1]);
   positionArray.push([1, 1]);
+  var direction = 'right';
+  var nextDirection = direction;
 
-  function move(direction) {
+  function setDirection(newDirection) {
+    var allowedDirections;
+
+    switch (direction) {
+      case 'left':
+      case 'right':
+        allowedDirections = ['up', 'down'];
+        break;
+      case 'up':
+      case 'down':
+        allowedDirections = ['left', 'right'];
+        break;
+      default:
+        throw new Exception('Invalid direction.');
+    }
+
+    if (allowedDirections.indexOf(newDirection) > -1) {
+      nextDirection = newDirection;
+    }
+  }
+
+  function turn() {
     var nextPosition = positionArray[0].slice();
-    
+    direction = nextDirection;
+
     switch(direction) {
       case 'up':
         nextPosition[1] -= 1;
@@ -77,7 +108,8 @@ SNAKE_GAME.snake = function() {
 
   return {
     draw: draw,
-    move: move
+    turn: turn,
+    setDirection: setDirection
   };
 } 
 
