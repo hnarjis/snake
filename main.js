@@ -5,11 +5,12 @@ SNAKE_GAME.game = function () {
   var timeout = 400;
   SNAKE_GAME.blockSize = 10;
   var snake;
+  var keyMappings = {38:'up', 40:'down', 37:'left', 39:'right'};
 
   function init() {
     ctx = document.getElementById('canvas').getContext('2d'); 
     snake = SNAKE_GAME.snake();
-    handleKeys();
+    window.onkeydown = handleKeys;
     loop();
   }
 
@@ -20,21 +21,17 @@ SNAKE_GAME.game = function () {
     setTimeout(loop, timeout);
   }
 
-  function handleKeys() {
-    var keyMappings = {38:'up', 40:'down', 37:'left', 39:'right'};
+  function handleKeys(event) {
+    var e = event || window.event;
+    var key = e.which || e.keyCode;
+    var direction = keyMappings[key];
 
-    window.onkeydown = function(event) {
-      var e = event || window.event;
-      var key = e.which || e.keyCode;
-      var direction = keyMappings[key];
-
-      if (direction) {
-        snake.setDirection(direction);
-        event.preventDefault();
-        return true;
-      }
+    if (direction) {
+      snake.setDirection(direction);
+      event.preventDefault();
       return false;
     }
+    return true;
   }
 
   return {
