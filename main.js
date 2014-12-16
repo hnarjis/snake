@@ -10,6 +10,7 @@ SNAKE_GAME.game = function () {
   function init() {
     ctx = document.getElementById('canvas').getContext('2d'); 
     snake = SNAKE_GAME.snake();
+    food = SNAKE_GAME.food();
     window.onkeydown = handleKeys;
     loop();
   }
@@ -18,6 +19,7 @@ SNAKE_GAME.game = function () {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     snake.turn();
     snake.draw(ctx);
+    food.draw(ctx);
     setTimeout(loop, timeout);
   }
 
@@ -109,6 +111,19 @@ SNAKE_GAME.snake = function() {
     setDirection: setDirection
   };
 } 
+
+SNAKE_GAME.food = function() {
+  function draw(ctx) {
+    ctx.fillStyle = 'blue';
+    ctx.beginPath();
+    ctx.arc(50, 40, 5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  return {
+    draw: draw,
+  };
+}
 
 window.onload = function() {
   SNAKE_GAME.game.init();
