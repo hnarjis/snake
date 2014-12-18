@@ -123,12 +123,14 @@ SNAKE_GAME.snake = function() {
 
 SNAKE_GAME.food = function(position) {
   function draw(ctx) {
+    ctx.save();
     var x = SNAKE_GAME.blockSize * (position[0] + 1/2);
     var y = SNAKE_GAME.blockSize * (position[1] + 1/2);
     ctx.fillStyle = 'red';
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
   }
 
   return {
