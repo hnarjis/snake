@@ -126,7 +126,7 @@ SNAKE_GAME.food = function(position) {
     ctx.save();
     var x = SNAKE_GAME.blockSize * (position[0] + 1/2);
     var y = SNAKE_GAME.blockSize * (position[1] + 1/2);
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = 'blue';
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fill();
