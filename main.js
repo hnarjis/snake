@@ -1,5 +1,9 @@
 var SNAKE_GAME = {};
 
+SNAKE_GAME.equalCoordinates = function (coord1, coord2) {
+  return coord1[0] === coord2[0] && coord1[1] === coord2[1];
+}
+
 SNAKE_GAME.game = function () {
   var ctx;
   var snake;
@@ -114,6 +118,10 @@ SNAKE_GAME.snake = function() {
     ctx.restore();
   }
 
+  function isEating(head, food) {
+    return SNAKE_GAME.equalCoordinates(head, food.getPosition());
+  }
+
   return {
     draw: draw,
     turn: turn,
@@ -126,15 +134,20 @@ SNAKE_GAME.food = function(position) {
     ctx.save();
     var x = SNAKE_GAME.blockSize * (position[0] + 1/2);
     var y = SNAKE_GAME.blockSize * (position[1] + 1/2);
-    ctx.fillStyle = 'blue';
+    ctx.fillStyle = 'red';
     ctx.beginPath();
     ctx.arc(x, y, 5, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   }
 
+  function getPosition() {
+    return position;
+  }
+
   return {
-    draw: draw
+    draw: draw,
+    getPosition: getPosition
   };
 }
 
