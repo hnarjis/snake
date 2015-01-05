@@ -8,7 +8,7 @@ SNAKE_GAME.game = function () {
   var ctx;
   var snake;
   var food;
-  var timeout = 400;
+  var time;
   SNAKE_GAME.blockSize = 10;
   var keyMappings = {38:'up', 40:'down', 37:'left', 39:'right'};
 
@@ -17,15 +17,19 @@ SNAKE_GAME.game = function () {
     snake = SNAKE_GAME.snake();
     food = SNAKE_GAME.food(randomizePosition());
     window.onkeydown = handleKeys;
-    loop();
+    time = 0;
+    loop(0);
   }
 
-  function loop() {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    snake.turn();
-    snake.draw(ctx);
-    food.draw(ctx);
-    setTimeout(loop, timeout);
+  function loop(now) {
+    if (now - time > 400) {
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      snake.turn();
+      snake.draw(ctx);
+      food.draw(ctx);
+      time = now;
+    }
+    window.requestAnimationFrame(loop);
   }
 
   function handleKeys(event) {
